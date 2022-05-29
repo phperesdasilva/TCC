@@ -9,6 +9,11 @@
   "idf.flashType": "UART",
   "files.associations": {
     "*.ipp": "c",
-    "system_error": "c"
+    "system_error": "c",
+    "can.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "twai.h": "c"
   }
 }

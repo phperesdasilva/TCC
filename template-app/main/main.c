@@ -4,21 +4,22 @@
 
 //can_message_t message_config (int *mensagem);
 
-can_message_t message_config (int index, int *mensagem){
+can_message_t message_config (int *mensagem){
   //Configure message to transmit
   can_message_t message;
   message.identifier = 0x1;
   message.flags = CAN_MSG_FLAG_EXTD;
   message.data_length_code = 7;
-  for (int i = 0; i < index; i++) {
-      message.data[i] = mensagem[i];  //DESCOBRIR QUAL A ESTRUTURA DO .data ---> BIT A BIT OU BYTE A BYTE
+  for (int i = 0; i < 7; i++) {
+      message.data[i] = mensagem[i];  //DESCOBRIR QUAL A ESTRUTURA DO .data ---> BIT A BIT OU BYTE A BYTE | R: byte a byte
                                       //NOTAS:
                                       //1. .data recebe valor em binário, printa valor inteiro convertido
                                       //2. precisa fazer um protótipo de função por causa do ponteiro?
                                       //3. precisa usar ponteiro?
-                                      //4. onde achar o header can.h? -> achar o tamanho do .data
+                                      //4. onde achar o header can.h? -> achar o tamanho do .data | R: data tem tamanho máximo 8
                                       //5. como colocar valor do sinal na mensagem?
-                                      //6. valor de i no for funciona até 34, acima disso apresenta GURU MEDITATION ERROR
+                                      //6. valor de i no for funciona até 34, acima disso apresenta GURU MEDITATION ERROR | R: precisa apenas de 8
+                                      //7. qual é o valor que deve ser colocado no .data?
       printf("mensagem: %i\t", mensagem[i]);
       printf("message.data: %i\n", message.data[i]);
   }
@@ -35,8 +36,7 @@ void trans_queue (can_message_t message){
   }
 }
 
-int Pt_Edrv_Des1_byte[7] = {11111111,00000000,11111111,00000000,11111111,00000000,11110111};
-int Pt_Edrv_Des1_bit[56] = {1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,01,1,1,1,1,1,1,1};
+int Pt_Edrv_Des1[7] = {{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1}};
 
 void app_main()
 { 
@@ -61,7 +61,7 @@ void app_main()
       return;
   }
 
-  can_message_t mensagem_config = message_config(34, &Pt_Edrv_Des1_bit);
+  can_message_t mensagem_config = message_config(&Pt_Edrv_Des1);
   trans_queue(mensagem_config);
 
 }
